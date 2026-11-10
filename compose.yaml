@@ -1,0 +1,21 @@
+services:
+  ssh-host:
+    build: .
+    image: docker-ssh-host:latest
+    container_name: ssh-host
+    hostname: ssh-host
+    ports:
+      - "2222:22"
+    environment:
+      # Leave unset to fall back to the demo password (demoP4ss).
+      SSH_PASSWORD: ${SSH_PASSWORD:-}
+      # Newline-separated public keys for the svcadmin account (optional).
+      SSH_AUTHORIZED_KEYS: ${SSH_AUTHORIZED_KEYS:-}
+      SSH_SUDO_NOPASSWD: ${SSH_SUDO_NOPASSWD:-false}
+      SSHD_LEGACY_ALGORITHMS: ${SSHD_LEGACY_ALGORITHMS:-false}
+    volumes:
+      - host-keys:/etc/ssh/host_keys
+    restart: unless-stopped
+
+volumes:
+  host-keys:
